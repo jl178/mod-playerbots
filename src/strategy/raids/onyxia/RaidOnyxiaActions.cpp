@@ -59,17 +59,36 @@ bool RaidOnyxiaMoveToSafeZoneAction::Execute(Event event)
     if (!boss)
         return false;
 
+    Spell* currentSpell = boss->GetCurrentSpell(CURRENT_GENERIC_SPELL);
+    if (!currentSpell)
+        return false;
+
+    uint32 spellId = currentSpell->m_spellInfo->Id;
     Position bossPos = boss->GetPosition();
-    float angle = boss->GetOrientation();  // Facing direction in radians
-    float offset = 30.0f;
 
-    // Pick one side (+90 degrees), perpendicular to breath - urand for a bit of
-    // randomness
-    float sideAngle = angle + (urand(0, 1) ? M_PI_2 : -M_PI_2);
-    float safeX = bossPos.GetPositionX() + offset * cos(sideAngle);
-    float safeY = bossPos.GetPositionY() + offset * sin(sideAngle);
+    float safeX = bossPos.GetPositionX();
+    float safeY = bossPos.GetPositionY();
+    constexpr float OFFSET = 30.0f;
 
-    // bot->Yell("Running To Safe Zone for Deep Breath!", LANG_UNIVERSAL);
-    return MoveTo(boss->GetMapId(), safeX, safeY, bossPos.GetPositionZ(), false, false, false, false,
+    switch (spellId)
+    {
+        case 17086:
+        case 18351:  // N <-> S
+            safeX += urand(0, 1) ? OFFSET : -OFFSET;
+            break;
+        case 18576:
+        case 18609:  // E <-> W
+            safeY += urand(0, 1) ? OFFSET : -OFFSET;
+            break;
+        default:
+            safeX += OFFSET * cos(boss->GetOrientation() + M_PI_2);
+            safeY += OFFSET * sin(boss->GetOrientation() + M_PI_2);
+            break;
+    }
+
+    float groundZ = bot->GetMap()->GetHeight(bot->GetPhaseMask(), safeX, safeY, bossPos.GetPositionZ());
+
+    bot->Yell("Moving to Safe Zone!", LANG_UNIVERSAL);
+    return MoveTo(boss->GetMapId(), safeX, safeY, groundZ, false, false, false, false,
                   MovementPriority::MOVEMENT_COMBAT);
 }
