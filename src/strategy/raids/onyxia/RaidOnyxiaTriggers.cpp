@@ -100,14 +100,14 @@ bool RaidOnyxiaWhelpsSpawnTrigger::IsActive()
 
     for (ObjectGuid guid : npcs)
     {
-        if (!guid.IsCreature())
+        if (!guid || !guid.IsCreature())
             continue;
 
         Creature* unit = botAI->GetCreature(guid);
         if (!unit || !unit->IsAlive())
             continue;
 
-        if (unit->GetEntry() == 11262 && bot->IsWithinDist(unit, 30.0f))
+        if (unit->GetEntry() == 11262)
         {
             return true;  // Found a valid whelp to attack
         }
