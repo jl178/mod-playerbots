@@ -64,31 +64,38 @@ bool RaidOnyxiaMoveToSafeZoneAction::Execute(Event event)
         return false;
 
     uint32 spellId = currentSpell->m_spellInfo->Id;
+    float angle = GetBreathDirectionAngle(spellId);
     Position bossPos = boss->GetPosition();
 
-    float safeX = bossPos.GetPositionX();
-    float safeY = bossPos.GetPositionY();
-    constexpr float OFFSET = 30.0f;
+    // Move perpendicular to breath (left or right randomly)
+    float sideOffset = M_PI_2 * (urand(0, 1) ? 1 : -1);
+    float safeAngle = angle + sideOffset;
 
-    switch (spellId)
-    {
-        case 17086:
-        case 18351:  // N <-> S
-            safeX += urand(0, 1) ? OFFSET : -OFFSET;
-            break;
-        case 18576:
-        case 18609:  // E <-> W
-            safeY += urand(0, 1) ? OFFSET : -OFFSET;
-            break;
-        default:
-            safeX += OFFSET * cos(boss->GetOrientation() + M_PI_2);
-            safeY += OFFSET * sin(boss->GetOrientation() + M_PI_2);
-            break;
-    }
-
-    float groundZ = bot->GetMap()->GetHeight(bot->GetPhaseMask(), safeX, safeY, bossPos.GetPositionZ());
+    float distance = 30.0f + urand(0, 10);  // Randomize for spread
+    float safeX = bot->GetPositionX() + distance * cos(safeAngle);
+    float safeY = bot->GetPositionY() + distance * sin(safeAngle);
+    float safeZ = bot->GetPositionZ();  // Stay on ground hopefully?
 
     bot->Yell("Moving to Safe Zone!", LANG_UNIVERSAL);
-    return MoveTo(boss->GetMapId(), safeX, safeY, groundZ, false, false, false, false,
-                  MovementPriority::MOVEMENT_COMBAT);
+    return MoveTo(boss->GetMapId(), safeX, safeY, safeZ, false, false, false, false, MovementPriority::MOVEMENT_COMBAT);
+}
+
+bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
+{
+    GuidVector npcs = AI_VALUE(GuidVector, "nearest hostile npcs");
+
+    for (ObjectGuid guid : npcs)
+    {
+        Unit* unit = botAI->GetUnit(guid);
+
+        if (!unit || !unit->IsAlive())
+            continue;
+
+        if (unit->GetEntry() == 11262)
+        {
+            bot->Yell("ATTACKING WHELPS!!! AHHHHH", LANG_UNIVERSAL);
+            return Attack(unit);
+        }
+    }
+    return false;
 }

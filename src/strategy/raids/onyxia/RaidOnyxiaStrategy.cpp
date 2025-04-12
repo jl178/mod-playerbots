@@ -8,6 +8,9 @@ void RaidOnyxiaStrategy::InitTriggers(std::vector<TriggerNode*>& triggers)
         "ony near tail", NextAction::array(0, new NextAction("ony move to side", ACTION_RAID + 2), nullptr)));
 
     // ----------- Phase 2 (65% - 40%) -----------
+    triggers.push_back(new TriggerNode(
+        "ony whelps spawn", NextAction::array(0, new NextAction("ony kill whelps", ACTION_RAID + 5), nullptr)));
+
     triggers.push_back(
         new TriggerNode("ony deep breath warning",
                         NextAction::array(0, new NextAction("ony move to safe zone", ACTION_EMERGENCY + 5), nullptr)));

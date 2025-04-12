@@ -83,3 +83,28 @@ bool RaidOnyxiaFireballSplashTrigger::IsActive()
 
     return false;
 }
+
+bool RaidOnyxiaWhelpsSpawnTrigger::IsActive()
+{
+    Unit* boss = AI_VALUE2(Unit*, "find target", "onyxia");
+    if (!boss || !boss->IsFlying())  // Only attack whelps if flying
+        return false;
+
+    GuidVector npcs = AI_VALUE(GuidVector, "nearest hostile npcs");
+    for (ObjectGuid guid : npcs)
+    {
+        Unit* unit = botAI->GetUnit(guid);
+        if (!unit || unit == bot->ToUnit() || !unit->IsAlive())
+        {
+            continue;
+        }
+
+        // Target ony whelps if they are within 30 yrds and they are not
+        // currently being targeted
+        if (bot->GetDistance(unit) <= 30.0f && unit->GetEntry() == 11262 && bot->GetVictim()->GetEntry() != 11262)
+        {
+            return true;
+        }
+    }
+    return false;
+}
