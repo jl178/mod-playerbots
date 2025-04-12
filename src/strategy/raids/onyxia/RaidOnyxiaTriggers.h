@@ -32,6 +32,6 @@ class RaidOnyxiaWhelpsSpawnTrigger : public Trigger
 public:
     RaidOnyxiaWhelpsSpawnTrigger(PlayerbotAI* botAI);
     bool IsActive() override;
-}
+};
 
 #endif
