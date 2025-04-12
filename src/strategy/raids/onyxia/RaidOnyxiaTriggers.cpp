@@ -84,6 +84,8 @@ bool RaidOnyxiaFireballSplashTrigger::IsActive()
     return false;
 }
 
+RaidOnyxiaWhelpsSpawnTrigger::RaidOnyxiaWhelpsSpawnTrigger(PlayerbotAI* botAI) : Trigger(botAI, "ony whelps spawn") {}
+
 bool RaidOnyxiaWhelpsSpawnTrigger::IsActive()
 {
     Unit* boss = AI_VALUE2(Unit*, "find target", "onyxia");
