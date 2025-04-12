@@ -104,7 +104,7 @@ bool RaidOnyxiaWhelpsSpawnTrigger::IsActive()
             continue;
 
         Creature* unit = botAI->GetCreature(guid);
-        if (!unit || !unit->IsAlive() || unit == bot)
+        if (!unit || !unit->IsAlive())
             continue;
 
         if (unit->GetEntry() == 11262 && bot->IsWithinDist(unit, 30.0f))
