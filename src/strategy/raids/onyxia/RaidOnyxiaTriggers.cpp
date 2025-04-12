@@ -92,7 +92,7 @@ bool RaidOnyxiaWhelpsSpawnTrigger::IsActive()
     if (!boss || !boss->IsFlying())
         return false;
 
-    Creature* victim = bot->GetVictim();
+    Unit* victim = bot->GetVictim();
     if (victim && victim->GetEntry() == 11262)
         return false;  // Already attacking whelp
 
