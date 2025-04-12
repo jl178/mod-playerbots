@@ -88,16 +88,19 @@ bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
 
     for (ObjectGuid guid : npcs)
     {
-        Unit* unit = botAI->GetUnit(guid);
-
-        if (!unit || !unit->IsAlive())
+        if (!guid.IsCreature())
             continue;
 
-        if (unit->GetEntry() == 11262)
+        Creature* creature = botAI->GetCreature(guid);
+        if (!creature || !creature->IsAlive() || !creature->IsInWorld())
+            continue;
+
+        if (creature->GetEntry() == 11262)
         {
             bot->Yell("ATTACKING WHELPS!!! AHHHHH", LANG_UNIVERSAL);
-            return Attack(unit);
+            return Attack(creature);
         }
     }
+
     return false;
 }
