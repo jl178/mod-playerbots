@@ -64,26 +64,42 @@ bool RaidOnyxiaMoveToSafeZoneAction::Execute(Event event)
         return false;
 
     uint32 spellId = currentSpell->m_spellInfo->Id;
-    float angle = GetBreathDirectionAngle(spellId);
-    Position bossPos = boss->GetPosition();
 
-    // Move perpendicular to breath
-    float sideOffset = M_PI_2;
-    float safeAngle = angle + sideOffset;
+    std::vector<SafeZone> safeZones = GetSafeZonesForBreath(spellId);
+    if (safeZones.empty())
+        return false;
 
-    float distance = 15.0f;
-    float safeX = bot->GetPositionX() + distance * cos(safeAngle);
-    float safeY = bot->GetPositionY() + distance * sin(safeAngle);
-    float safeZ = bot->GetPositionZ();  // Stay on ground hopefully?
+    // Find closest safe zone
+    SafeZone* bestZone = nullptr;
+    float bestDist = std::numeric_limits<float>::max();
+
+    for (auto& zone : safeZones)
+    {
+        float dist = bot->GetDistance2d(zone.pos);
+        if (dist < bestDist)
+        {
+            bestDist = dist;
+            bestZone = &zone;
+        }
+    }
+
+    if (!bestZone)
+        return false;
+
+    if (bestZone->IsInRadius(bot))
+        return false;  // Already safe
 
     bot->Yell("Moving to Safe Zone!", LANG_UNIVERSAL);
-    return MoveTo(boss->GetMapId(), safeX, safeY, safeZ, false, false, false, false, MovementPriority::MOVEMENT_COMBAT);
-    return true;
+    return MoveTo(bot->GetMapId(), bestZone->pos.GetPositionX(), bestZone->pos.GetPositionY(), bot->GetPositionZ(),
+                  false, false, false, false, MovementPriority::MOVEMENT_COMBAT);
 }
 
 bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
 {
     GuidVector npcs = AI_VALUE(GuidVector, "nearest hostile npcs");
+    Unit* victim = bot->GetVictim();
+    if (victim && victim->GetEntry() == 11262 && victim->IsAlive())
+        return false;  // Already attacking whelp
 
     for (ObjectGuid guid : npcs)
     {

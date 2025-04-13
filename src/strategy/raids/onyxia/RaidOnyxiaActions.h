@@ -29,6 +29,12 @@ public:
     bool Execute(Event event) override;
 };
 
+struct SafeZone
+{
+    Position pos;
+    float radius;
+};
+
 class RaidOnyxiaMoveToSafeZoneAction : public MovementAction
 {
 public:
@@ -39,28 +45,42 @@ public:
     bool Execute(Event event) override;
 
 private:
-    float GetBreathDirectionAngle(uint32 spellId)
+    std::vector<SafeZone> GetSafeZonesForBreath(uint32 spellId)
     {
+        // Define your safe zone coordinates based on the map
+        // Example assumes Onyxia's lair map coordinates
+        float z = bot->GetPositionZ();  // Stay at current height
+
         switch (spellId)
         {
-            case 17086:
-                return 0.0f;  // N to S
-            case 18351:
-                return M_PI;  // S to N
-            case 18576:
-                return M_PI_2 * 3;  // E to W
-            case 18609:
-                return M_PI_2;  // W to E
-            case 18564:
-                return M_PI_4 * 5;  // SE to NW
-            case 18584:
-                return M_PI_4;  // NW to SE
-            case 18596:
-                return M_PI_4 * 7;  // SW to NE
-            case 18617:
-                return M_PI_4 * 3;  // NE to SW
+            case 17086:  // N to S
+            case 18351:  // S to N
+                return {SafeZone{Position(-45.0f, -85.0f, z), 5.0f},
+                        SafeZone{Position(-20.0f, -250.0f, z), 5.0f}};  // Bottom Safe Zone
+
+            case 18576:  // E to W
+            case 18609:  // W to E
+                return {
+                    SafeZone{Position(20.0f, -210.0f, z), 5.0f},
+                    SafeZone{Position(-75.0f, -210.0f, z), 5.0f},
+                };  // Left Safe Zone
+
+            case 18564:  // SE to NW
+            case 18584:  // NW to SE
+                return {
+                    SafeZone{Position(-60.0f, -195.0f, z), 5.0f},
+                    SafeZone{Position(10.0f, -240.0f, z), 5.0f},
+                };  // NW Safe Zone
+
+            case 18596:  // SW to NE
+            case 18617:  // NE to SW
+                return {
+                    SafeZone{Position(7.0f, -185.0f, z), 5.0f},
+                    SafeZone{Position(-60.0f, -240.0f, z), 5.0f},
+                };  // NE Safe Zone
+
             default:
-                return -1.0f;  // Unknown
+                return {SafeZone{Position(0.0f, 0.0f, z), 5.0f}};  // Fallback center - shouldn't ever happen
         }
     }
 };

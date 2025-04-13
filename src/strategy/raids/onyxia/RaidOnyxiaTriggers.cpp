@@ -91,10 +91,6 @@ bool RaidOnyxiaWhelpsSpawnTrigger::IsActive()
     if (!boss || !boss->IsFlying())
         return false;
 
-    Unit* victim = bot->GetVictim();
-    if (victim && victim->GetEntry() == 11262 && victim->IsAlive())
-        return false;  // Already attacking whelp
-
     GuidVector npcs = AI_VALUE(GuidVector, "nearest hostile npcs");
 
     for (ObjectGuid guid : npcs)
