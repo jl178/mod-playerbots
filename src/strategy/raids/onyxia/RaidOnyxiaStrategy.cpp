@@ -8,8 +8,6 @@ void RaidOnyxiaStrategy::InitTriggers(std::vector<TriggerNode*>& triggers)
         "ony near tail", NextAction::array(0, new NextAction("ony move to side", ACTION_RAID + 2), nullptr)));
 
     // ----------- Phase 2 (65% - 40%) -----------
-    triggers.push_back(new TriggerNode(
-        "ony whelps spawn", NextAction::array(0, new NextAction("ony kill whelps", ACTION_RAID + 5), nullptr)));
 
     triggers.push_back(
         new TriggerNode("ony deep breath warning",
@@ -17,7 +15,10 @@ void RaidOnyxiaStrategy::InitTriggers(std::vector<TriggerNode*>& triggers)
 
     triggers.push_back(
         new TriggerNode("ony fireball splash incoming",
-                        NextAction::array(0, new NextAction("ony spread out", ACTION_MOVE + 2), nullptr)));
+                        NextAction::array(0, new NextAction("ony spread out", ACTION_EMERGENCY + 2), nullptr)));
+
+    triggers.push_back(new TriggerNode(
+        "ony whelps spawn", NextAction::array(0, new NextAction("ony kill whelps", ACTION_RAID + 5), nullptr)));
 }
 
 void RaidOnyxiaStrategy::InitMultipliers(std::vector<Multiplier*>& multipliers)
