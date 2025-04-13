@@ -67,11 +67,11 @@ bool RaidOnyxiaMoveToSafeZoneAction::Execute(Event event)
     float angle = GetBreathDirectionAngle(spellId);
     Position bossPos = boss->GetPosition();
 
-    // Move perpendicular to breath (left or right randomly)
-    float sideOffset = M_PI_2 * (urand(0, 1) ? 1 : -1);
+    // Move perpendicular to breath
+    float sideOffset = M_PI_2;
     float safeAngle = angle + sideOffset;
 
-    float distance = 30.0f + urand(0, 10);  // Randomize for spread
+    float distance = 15.0f;
     float safeX = bot->GetPositionX() + distance * cos(safeAngle);
     float safeY = bot->GetPositionY() + distance * sin(safeAngle);
     float safeZ = bot->GetPositionZ();  // Stay on ground hopefully?
@@ -87,17 +87,10 @@ bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
 
     for (ObjectGuid guid : npcs)
     {
-        if (!guid.IsCreature())
-            continue;
-
         Creature* creature = botAI->GetCreature(guid);
-        if (!creature || !creature->IsAlive() || !creature->IsInWorld())
-            continue;
-
-        if (creature->GetEntry() == 11262)
+        if (creature && creature->GetEntry() == 11262)
         {
             bot->Yell("ATTACKING WHELPS!!! AHHHHH", LANG_UNIVERSAL);
-            context->GetValue<Unit*>("current target")->Set(creature->ToUnit());
             return Attack(creature->ToUnit());
         }
     }

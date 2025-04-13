@@ -52,7 +52,6 @@ bool OnyxiaNearTailTrigger::IsActive()
 
     return true;
 }
-
 RaidOnyxiaFireballSplashTrigger::RaidOnyxiaFireballSplashTrigger(PlayerbotAI* botAI)
     : Trigger(botAI, "ony fireball splash incoming")
 {
