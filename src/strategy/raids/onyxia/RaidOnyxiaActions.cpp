@@ -97,8 +97,8 @@ bool RaidOnyxiaMoveToSafeZoneAction::Execute(Event event)
 bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
 {
     GuidVector npcs = AI_VALUE(GuidVector, "nearest hostile npcs");
-    Unit* victim = bot->GetVictim();
-    if (victim && victim->GetEntry() == 11262 && victim->IsAlive())
+    Unit* target = bot->GetVictim();
+    if (target && target->GetEntry() == 11262 && target->IsAlive())
         return false;  // Already attacking whelp
 
     for (ObjectGuid guid : npcs)
