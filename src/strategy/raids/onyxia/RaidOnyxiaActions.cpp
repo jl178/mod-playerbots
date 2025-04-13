@@ -30,7 +30,7 @@ bool RaidOnyxiaMoveToSideAction::Execute(Event event)
         float sideX = boss->GetPositionX() + offsetDist * cos(offsetAngle);
         float sideY = boss->GetPositionY() + offsetDist * sin(offsetAngle);
 
-        bot->Yell("Too close to front or tail — moving to side of Onyxia!", LANG_UNIVERSAL);
+        // bot->Yell("Too close to front or tail — moving to side of Onyxia!", LANG_UNIVERSAL);
         return MoveTo(boss->GetMapId(), sideX, sideY, boss->GetPositionZ(), false, false, false, false,
                       MovementPriority::MOVEMENT_COMBAT);
     }
@@ -49,7 +49,7 @@ bool RaidOnyxiaSpreadOutAction::Execute(Event event)
     if (target != bot)
         return false;
 
-    bot->Yell("Spreading out — I'm the Fireball target!", LANG_UNIVERSAL);
+    // bot->Yell("Spreading out — I'm the Fireball target!", LANG_UNIVERSAL);
     return MoveFromGroup(9.0f);  // move 9 yards
 }
 
@@ -89,26 +89,20 @@ bool RaidOnyxiaMoveToSafeZoneAction::Execute(Event event)
     if (bot->IsWithinDist2d(bestZone->pos.GetPositionX(), bestZone->pos.GetPositionY(), bestZone->radius))
         return false;  // Already safe
 
-    bot->Yell("Moving to Safe Zone!", LANG_UNIVERSAL);
+    // bot->Yell("Moving to Safe Zone!", LANG_UNIVERSAL);
     return MoveTo(bot->GetMapId(), bestZone->pos.GetPositionX(), bestZone->pos.GetPositionY(), bot->GetPositionZ(),
                   false, false, false, false, MovementPriority::MOVEMENT_COMBAT);
 }
 
 bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
 {
-    Unit* boss = AI_VALUE2(Unit*, "find target", "onyxia");
-    if (!boss)
-        return false;
-
     Unit* currentTarget = AI_VALUE(Unit*, "current target");
     // If already attacking a whelp, don't swap targets
     if (currentTarget && currentTarget->GetEntry() == 11262)
     {
         return false;
     }
-
     GuidVector targets = AI_VALUE(GuidVector, "possible targets");
-
     for (ObjectGuid guid : targets)
     {
         Creature* unit = botAI->GetCreature(guid);
@@ -117,11 +111,9 @@ bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
 
         if (unit->GetEntry() == 11262)  // Onyxia Whelp
         {
-            bot->Yell("Attacking Whelps!", LANG_UNIVERSAL);
-            return true;
-            // return Attack(unit);
+            // bot->Yell("Attacking Whelps!", LANG_UNIVERSAL);
+            return Attack(unit);
         }
     }
-
     return false;
 }
