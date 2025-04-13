@@ -75,7 +75,7 @@ bool RaidOnyxiaMoveToSafeZoneAction::Execute(Event event)
 
     for (auto& zone : safeZones)
     {
-        float dist = bot->GetDistance2d(zone.pos);
+        float dist = bot->GetExactDist2d(zone.pos.GetPositionX(), zone.pos.GetPositionY());
         if (dist < bestDist)
         {
             bestDist = dist;
