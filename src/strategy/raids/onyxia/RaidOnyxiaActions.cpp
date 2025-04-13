@@ -97,6 +97,7 @@ bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
         if (creature->GetEntry() == 11262)
         {
             bot->Yell("ATTACKING WHELPS!!! AHHHHH", LANG_UNIVERSAL);
+            context->GetValue<Unit*>("current target")->Set(creature->ToUnit());
             return Attack(creature->ToUnit());
         }
     }
