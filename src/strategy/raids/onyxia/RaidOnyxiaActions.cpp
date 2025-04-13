@@ -123,10 +123,5 @@ bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
         }
     }
 
-    if (currentTarget != boss)
-    {
-        return Attack(boss);
-    }
-
     return false;
 }
