@@ -86,7 +86,7 @@ bool RaidOnyxiaMoveToSafeZoneAction::Execute(Event event)
     if (!bestZone)
         return false;
 
-    if (bestZone->IsInRadius(bot))
+    if (bot->IsWithinDist2d(bestZone->pos.GetPositionX(), bestZone->pos.GetPositionY(), bestZone->radius))
         return false;  // Already safe
 
     bot->Yell("Moving to Safe Zone!", LANG_UNIVERSAL);

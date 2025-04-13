@@ -33,8 +33,6 @@ struct SafeZone
 {
     Position pos;
     float radius;
-
-    bool IsInRadius(Unit* unit) const { return unit->IsWithinDist(&pos, radius); }
 };
 
 class RaidOnyxiaMoveToSafeZoneAction : public MovementAction
