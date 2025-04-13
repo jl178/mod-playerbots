@@ -101,6 +101,11 @@ bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
         return false;
 
     Unit* currentTarget = AI_VALUE(Unit*, "current target");
+    // If already attacking a whelp, don't swap targets
+    if (currentTarget && currentTarget->GetEntry() == 11262)
+    {
+        return false;
+    }
 
     GuidVector targets = AI_VALUE(GuidVector, "possible targets");
 
@@ -112,7 +117,9 @@ bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
 
         if (unit->GetEntry() == 11262)  // Onyxia Whelp
         {
-            return Attack(unit);
+            bot->Yell("Attacking Whelps!", LANG_UNIVERSAL);
+            return true;
+            // return Attack(unit);
         }
     }
 
