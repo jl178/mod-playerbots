@@ -88,29 +88,8 @@ RaidOnyxiaWhelpsSpawnTrigger::RaidOnyxiaWhelpsSpawnTrigger(PlayerbotAI* botAI) :
 bool RaidOnyxiaWhelpsSpawnTrigger::IsActive()
 {
     Unit* boss = AI_VALUE2(Unit*, "find target", "onyxia");
-    if (!boss || !boss->IsFlying())
+    if (!boss)
         return false;
-    return botAI->IsDps(bot) || botAI->IsTank(bot);
-    // if (!boss)
-    //     return false;
-    //
-    // GuidVector npcs = AI_VALUE(GuidVector, "nearest hostile npcs");
-    //
-    // for (ObjectGuid guid : npcs)
-    // {
-    //     if (!guid || !guid.IsCreature())
-    //         continue;
-    //
-    //     Creature* unit = botAI->GetCreature(guid);
-    //     if (!unit || !unit->IsAlive())
-    //         continue;
-    //
-    //     if (unit->GetEntry() == 11262)
-    //     {
-    //         // DPS and tanks attack whelps
-    //         return botAI->IsDps(bot) || botAI->IsTank(bot);
-    //     }
-    // }
-    //
-    // return false;
+
+    return !botAI->IsHeal(bot) && boss->IsFlying();  // DPS + Tanks only
 }

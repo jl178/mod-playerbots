@@ -96,22 +96,36 @@ bool RaidOnyxiaMoveToSafeZoneAction::Execute(Event event)
 
 bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
 {
-    GuidVector npcs = AI_VALUE(GuidVector, "nearest hostile npcs");
-    Unit* target = bot->GetVictim();
-    if (target && target->GetEntry() == 11262 && target->IsAlive())
+    Unit* boss = AI_VALUE2(Unit*, "find target", "onyxia");
+    if (!boss)
+        return false;
+
+    Unit* currentTarget = AI_VALUE(Unit*, "current target");
+
+    GuidVector targets = AI_VALUE(GuidVector, "possible targets");
+
+    for (ObjectGuid guid : targets)
     {
-        bot->Yell("Already attacking whelp", LANG_UNIVERSAL);
-        return false;  // Already attacking whelp
+        Creature* unit = botAI->GetCreature(guid);
+        if (!unit || !unit->IsAlive() || !unit->IsInWorld())
+            continue;
+
+        if (unit->GetEntry() == 11262)  // Onyxia Whelp
+        {
+            // If already attacking a whelp, don't swap targets
+            if (currentTarget && currentTarget->GetEntry() == 11262)
+            {
+                return false;
+            }
+
+            bot->Yell("Attacking Whelps!", LANG_UNIVERSAL);
+            return Attack(unit);
+        }
     }
 
-    for (ObjectGuid guid : npcs)
+    if (currentTarget != boss)
     {
-        Creature* creature = botAI->GetCreature(guid);
-        if (creature && creature->GetEntry() == 11262)
-        {
-            bot->Yell("ATTACKING WHELPS!!! AHHHHH", LANG_UNIVERSAL);
-            return Attack(creature->ToUnit());
-        }
+        return Attack(boss);
     }
 
     return false;
