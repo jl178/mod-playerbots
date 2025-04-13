@@ -55,7 +55,7 @@ private:
         {
             case 17086:  // N to S
             case 18351:  // S to N
-                return {SafeZone{Position(-45.0f, -85.0f, z), 5.0f},
+                return {SafeZone{Position(-30.0f, -180.0f, z), 5.0f},
                         SafeZone{Position(-20.0f, -250.0f, z), 5.0f}};  // Bottom Safe Zone
 
             case 18576:  // E to W
