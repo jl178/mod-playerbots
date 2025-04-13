@@ -124,6 +124,7 @@ bool OnyxiaAvoidEggsAction::Execute(Event event)
 
     float x, y;
 
+    // get safe zone slightly away from eggs (Can this be dynamic?)
     if (botPos.GetExactDist2d(-36.0f, -164.0f) <= 5.0f)
     {
         x = -10.0f;
@@ -139,8 +140,7 @@ bool OnyxiaAvoidEggsAction::Execute(Event event)
         return false;  // Not in danger zone
     }
 
-    // Optional: Yell for debug
-    bot->Yell("Too close to eggs — backing off!", LANG_UNIVERSAL);
+    // bot->Yell("Too close to eggs — backing off!", LANG_UNIVERSAL);
 
     return MoveTo(bot->GetMapId(), x, y, bot->GetPositionZ(), false, false, false, false,
                   MovementPriority::MOVEMENT_COMBAT);
