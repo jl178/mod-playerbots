@@ -18,7 +18,7 @@ void RaidOnyxiaStrategy::InitTriggers(std::vector<TriggerNode*>& triggers)
                         NextAction::array(0, new NextAction("ony spread out", ACTION_EMERGENCY + 2), nullptr)));
 
     triggers.push_back(new TriggerNode(
-        "ony whelps spawn", NextAction::array(0, new NextAction("ony kill whelps", ACTION_RAID + 5), nullptr)));
+        "ony whelps spawn", NextAction::array(0, new NextAction("ony kill whelps", ACTION_RAID + 1), nullptr)));
 }
 
 void RaidOnyxiaStrategy::InitMultipliers(std::vector<Multiplier*>& multipliers)

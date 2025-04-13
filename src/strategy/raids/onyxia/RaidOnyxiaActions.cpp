@@ -55,30 +55,29 @@ bool RaidOnyxiaSpreadOutAction::Execute(Event event)
 
 bool RaidOnyxiaMoveToSafeZoneAction::Execute(Event event)
 {
-    // Unit* boss = AI_VALUE2(Unit*, "find target", "onyxia");
-    // if (!boss)
-    //     return false;
-    //
-    // Spell* currentSpell = boss->GetCurrentSpell(CURRENT_GENERIC_SPELL);
-    // if (!currentSpell)
-    //     return false;
-    //
-    // uint32 spellId = currentSpell->m_spellInfo->Id;
-    // float angle = GetBreathDirectionAngle(spellId);
-    // Position bossPos = boss->GetPosition();
-    //
-    // // Move perpendicular to breath (left or right randomly)
-    // float sideOffset = M_PI_2 * (urand(0, 1) ? 1 : -1);
-    // float safeAngle = angle + sideOffset;
-    //
-    // float distance = 30.0f + urand(0, 10);  // Randomize for spread
-    // float safeX = bot->GetPositionX() + distance * cos(safeAngle);
-    // float safeY = bot->GetPositionY() + distance * sin(safeAngle);
-    // float safeZ = bot->GetPositionZ();  // Stay on ground hopefully?
-    //
+    Unit* boss = AI_VALUE2(Unit*, "find target", "onyxia");
+    if (!boss)
+        return false;
+
+    Spell* currentSpell = boss->GetCurrentSpell(CURRENT_GENERIC_SPELL);
+    if (!currentSpell)
+        return false;
+
+    uint32 spellId = currentSpell->m_spellInfo->Id;
+    float angle = GetBreathDirectionAngle(spellId);
+    Position bossPos = boss->GetPosition();
+
+    // Move perpendicular to breath (left or right randomly)
+    float sideOffset = M_PI_2 * (urand(0, 1) ? 1 : -1);
+    float safeAngle = angle + sideOffset;
+
+    float distance = 30.0f + urand(0, 10);  // Randomize for spread
+    float safeX = bot->GetPositionX() + distance * cos(safeAngle);
+    float safeY = bot->GetPositionY() + distance * sin(safeAngle);
+    float safeZ = bot->GetPositionZ();  // Stay on ground hopefully?
+
     bot->Yell("Moving to Safe Zone!", LANG_UNIVERSAL);
-    // return MoveTo(boss->GetMapId(), safeX, safeY, safeZ, false, false, false, false,
-    // MovementPriority::MOVEMENT_COMBAT);
+    return MoveTo(boss->GetMapId(), safeX, safeY, safeZ, false, false, false, false, MovementPriority::MOVEMENT_COMBAT);
     return true;
 }
 

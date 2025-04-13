@@ -93,8 +93,8 @@ bool RaidOnyxiaWhelpsSpawnTrigger::IsActive()
         return false;
 
     Unit* victim = bot->GetVictim();
-    // if (victim && victim->GetEntry() == 11262 && victim->IsAlive())
-    //     return false;  // Already attacking whelp
+    if (victim && victim->GetEntry() == 11262 && victim->IsAlive())
+        return false;  // Already attacking whelp
 
     GuidVector npcs = AI_VALUE(GuidVector, "nearest hostile npcs");
 
@@ -109,7 +109,8 @@ bool RaidOnyxiaWhelpsSpawnTrigger::IsActive()
 
         if (unit->GetEntry() == 11262)
         {
-            return true;  // Found a valid whelp to attack
+            // DPS and tanks attack whelps
+            return botAI->IsDps(bot) || botAI->IsTank(bot);
         }
     }
 
