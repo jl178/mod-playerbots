@@ -112,13 +112,6 @@ bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
 
         if (unit->GetEntry() == 11262)  // Onyxia Whelp
         {
-            // If already attacking a whelp, don't swap targets
-            if (currentTarget && currentTarget->GetEntry() == 11262)
-            {
-                return false;
-            }
-
-            bot->Yell("Attacking Whelps!", LANG_UNIVERSAL);
             return Attack(unit);
         }
     }

@@ -91,5 +91,5 @@ bool RaidOnyxiaWhelpsSpawnTrigger::IsActive()
     if (!boss)
         return false;
 
-    return !botAI->IsHeal(bot);  // DPS + Tanks only
+    return !botAI->IsHeal(bot) && boss->IsFlying();  // DPS + Tanks only
 }
