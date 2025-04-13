@@ -55,7 +55,7 @@ private:
         {
             case 17086:  // N to S
             case 18351:  // S to N
-                return {SafeZone{Position(-30.0f, -180.0f, z), 5.0f},
+                return {SafeZone{Position(-10.0f, -180.0f, z), 5.0f},
                         SafeZone{Position(-20.0f, -250.0f, z), 5.0f}};  // Bottom Safe Zone
 
             case 18576:  // E to W
@@ -92,6 +92,14 @@ public:
         : AttackAction(botAI, name)
     {
     }
+
+    bool Execute(Event event) override;
+};
+
+class OnyxiaAvoidEggsAction : public MovementAction
+{
+public:
+    OnyxiaAvoidEggsAction(PlayerbotAI* botAI) : MovementAction(botAI, "ony avoid eggs move") {}
 
     bool Execute(Event event) override;
 };

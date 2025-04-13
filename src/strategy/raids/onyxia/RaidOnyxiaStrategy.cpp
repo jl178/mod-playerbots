@@ -7,6 +7,9 @@ void RaidOnyxiaStrategy::InitTriggers(std::vector<TriggerNode*>& triggers)
     triggers.push_back(new TriggerNode(
         "ony near tail", NextAction::array(0, new NextAction("ony move to side", ACTION_RAID + 2), nullptr)));
 
+    triggers.push_back(new TriggerNode(
+        "ony avoid eggs", NextAction::array(0, new NextAction("ony avoid eggs move", ACTION_EMERGENCY + 5), nullptr)));
+
     // ----------- Phase 2 (65% - 40%) -----------
 
     triggers.push_back(

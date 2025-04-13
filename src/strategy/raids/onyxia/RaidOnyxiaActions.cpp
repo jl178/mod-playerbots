@@ -117,3 +117,31 @@ bool RaidOnyxiaKillWhelpsAction::Execute(Event event)
     }
     return false;
 }
+
+bool OnyxiaAvoidEggsAction::Execute(Event event)
+{
+    Position botPos = Position(bot->GetPositionX(), bot->GetPositionY(), bot->GetPositionZ());
+
+    float x, y;
+
+    if (botPos.GetExactDist2d(-36.0f, -164.0f) <= 5.0f)
+    {
+        x = -10.0f;
+        y = -180.0f;
+    }
+    else if (botPos.GetExactDist2d(-34.0f, -262.0f) <= 5.0f)
+    {
+        x = -16.0f;
+        y = -250.0f;
+    }
+    else
+    {
+        return false;  // Not in danger zone
+    }
+
+    // Optional: Yell for debug
+    bot->Yell("Too close to eggs — backing off!", LANG_UNIVERSAL);
+
+    return MoveTo(bot->GetMapId(), x, y, bot->GetPositionZ(), false, false, false, false,
+                  MovementPriority::MOVEMENT_COMBAT);
+}

@@ -34,4 +34,11 @@ public:
     bool IsActive() override;
 };
 
+class OnyxiaAvoidEggsTrigger : public Trigger
+{
+public:
+    OnyxiaAvoidEggsTrigger(PlayerbotAI* botAI);
+    bool IsActive() override;
+};
+
 #endif

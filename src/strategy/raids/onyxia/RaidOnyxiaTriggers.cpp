@@ -93,3 +93,18 @@ bool RaidOnyxiaWhelpsSpawnTrigger::IsActive()
 
     return !botAI->IsHeal(bot) && boss->IsFlying();  // DPS + Tanks only
 }
+
+OnyxiaAvoidEggsTrigger::OnyxiaAvoidEggsTrigger(PlayerbotAI* botAI) : Trigger(botAI, "ony avoid eggs") {}
+
+bool OnyxiaAvoidEggsTrigger::IsActive()
+{
+    Position botPos = Position(bot->GetPositionX(), bot->GetPositionY(), bot->GetPositionZ());
+
+    if (botPos.GetExactDist2d(-35.0f, -165.0f) <= 5.0f)
+        return true;
+
+    if (botPos.GetExactDist2d(-35.0f, -260.0f) <= 5.0f)
+        return true;
+
+    return false;
+}
